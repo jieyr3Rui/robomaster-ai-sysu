@@ -7,3 +7,4 @@ class block(pygame.sprite.Sprite):
 
 # hi
 # hello
+# hi
