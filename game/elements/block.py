@@ -6,3 +6,4 @@ class block(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
 # hi
+# hello
