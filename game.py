@@ -2,6 +2,8 @@
 import pygame
 from elements.robot import robot
 from elements.ground import ground
+
+vec = pygame.math.Vector2
 class game():
     def __init__(self):
         pygame.init()
@@ -12,12 +14,15 @@ class game():
         self.done = False
         self.ground = ground('elements/resource/ground.png')
         self.robot1 = robot('elements/resource/robot1.png', 'robot1', 200, 200, 0)
+        self.robot2 = robot('elements/resource/robot2.png', 'robot2', 500, 300, 0)
 
         self.ground_group = pygame.sprite.Group()
         self.robot1_group = pygame.sprite.Group()
+        self.robot2_group = pygame.sprite.Group()
+
         self.ground_group.add(self.ground)
         self.robot1_group.add(self.robot1)
-
+        self.robot2_group.add(self.robot2)
 
 
     def run(self):
@@ -69,11 +74,16 @@ class game():
             self.ground_group.draw(self.screen)
             self.ground.block_group.draw(self.screen)
             self.robot1_group.draw(self.screen)
+            self.robot2_group.draw(self.screen)
+            self.robot1.bullet_group.draw(self.screen)
             pygame.display.update()
 
     def step(self, action1, action2):
-        self.robot1.move(action1[0], action1[1], action1[2], self.ground.block_group)
-        
+        self.robot1.move(action1[0], action1[1], action1[2], self.robot2_group, self.ground.block_group)
+        self.robot2.move(action2[0], action2[1], action2[2], self.robot1_group, self.ground.block_group)
+       
+        self.robot1.shoot(action1[3], self.robot2_group, self.ground.block_group)
+
         return
     
     def reset(self):

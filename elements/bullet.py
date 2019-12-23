@@ -16,9 +16,11 @@ class bullet(pygame.sprite.Sprite):
         self.pos = vec(x, y)
         self.rect.center = self.pos
     
-    def move(self, block_group, robot):
-        new_x = self.x + self.v * np.math.cos(self.yaw)
-        new_y = self.y + self.v * np.math.sin(self.yaw)
+    def move(self, robot_group, block_group):
+        new_x = self.pos[0] + self.v * np.math.cos(self.yaw)
+        new_y = self.pos[1] + self.v * np.math.sin(self.yaw)
+        self.pos = vec(new_x, new_y)
+        self.rect.center = self.pos
 
 
         
