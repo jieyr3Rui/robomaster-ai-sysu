@@ -1,12 +1,12 @@
 # class block
 import pygame
-
+from define import *
 
 class block(pygame.sprite.Sprite):
-    def __init__(self, x, y, w, h, color):
+    def __init__(self, x, y, w, h, color=blue):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((w, h))
-        self.image.fill((0, 0, 255))
+        self.image.fill(color)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
