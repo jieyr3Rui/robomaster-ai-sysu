@@ -29,9 +29,3 @@ class robot_virtual(pygame.sprite.Sprite):
         self.yaw = new_yaw
         return True
 
-    def act(self, action):
-
-        return
-
-    def shape(self):
-        return
