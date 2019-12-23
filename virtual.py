@@ -5,9 +5,9 @@ class block_virtual(object):
     def __init__(self, x, y, l, w):
         self.x, self.y, self.l, self.w = x, y, l, w
 
-    def hit_bullet(self, bullet):
-        if abs(self.x - bullet.x) < (self.w + bullet.r) and \
-           abs(self.y - bullet.y) < (self.l + bullet.r) :
+    def hit_bullet(self, x, y, r):
+        if abs(self.x - x) < (self.w + r) and \
+           abs(self.y - y) < (self.l + r):
             return True
         return False
         
@@ -29,8 +29,8 @@ class bullet_virtaul(object):
         self.y += self.v * np.math.sin(self.yaw)
         return
 
-    def hit(self, player):
-
+    def hit(self, robot):
+        
         return
 
 # robot.py
@@ -48,7 +48,10 @@ class robot_virtual(object):
         return
 
     def move(self, vx, vy, rotate, plist_block):
-        new_bullet = bullet_virtaul()
+        new_x =   self.x     + vx
+        new_y =   self.y     + vy
+        new_yaw = self.yaw   + rotate
+        
         return
 
     def act(self, action):
