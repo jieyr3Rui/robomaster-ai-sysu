@@ -68,7 +68,7 @@ class game():
             if key[pygame.K_l]:     # shoot
                 action2[3] = 1
 
-            print(action1, action2)
+            # print(action1, action2)
             self.step(action1, action2)
 
             self.ground_group.draw(self.screen)

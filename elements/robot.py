@@ -28,15 +28,25 @@ class robot(pygame.sprite.Sprite):
         if self.shoot_time > 0:
             self.shoot_time -= 1
         if (self.bullet_num > 0) and (self.shoot_time == 0) and (sh == 1):
-            new_bullet_x = self.pos[0] - self.h * np.math.sin(self.yaw/180)
-            new_bullet_y = self.pos[1] + self.h * np.math.cos(self.yaw/180)
+            new_bullet_x = self.pos[0] + self.h * np.math.sin(self.yaw/180)
+            new_bullet_y = self.pos[1] - self.h * np.math.cos(self.yaw/180)
             self.bullet_group.add(bullet(self.player, new_bullet_x, new_bullet_y, self.yaw))
             self.bullet_num -= 1
             self.shoot_time = 30
-        
+
         for b in self.bullet_group:
-            b_state = b.move(robot_group, block_group) 
-        return True
+            b.move(robot_group, block_group)
+        hit = pygame.sprite.groupcollide(self.bullet_group, block_group, True, False)
+        # reward 
+
+        for robot in robot_group:
+            hit = pygame.sprite.spritecollide(robot, self.bullet_group, True, False)
+            hit_num = len(hit)
+            while hit_num > 0:
+                # reward
+                robot.be_hit()
+                hit_num -= 1
+
 
     def move(self, vx, vy, rotate, robot_group, block_group):
         new_pos = self.pos + vec(vx, vy)
@@ -53,6 +63,13 @@ class robot(pygame.sprite.Sprite):
             self.pos = new_pos
             self.yaw = new_yaw
             return True
+    
+    def be_hit(self):
+        self.hp -= 10
+        print(self.player + ' be hit ' + 'hp = ' + str(self.hp))
+
+    def reset(self):
+        return
         
     
 

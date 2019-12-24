@@ -21,6 +21,7 @@ class bullet(pygame.sprite.Sprite):
         new_y = self.pos[1] + self.v * np.math.sin(self.yaw)
         self.pos = vec(new_x, new_y)
         self.rect.center = self.pos
+        
 
 
         
