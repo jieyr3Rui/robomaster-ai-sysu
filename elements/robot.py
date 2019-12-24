@@ -2,6 +2,7 @@
 import pygame
 import numpy as np
 from elements.bullet import bullet
+from define import *
 
 vec = pygame.math.Vector2
 class robot(pygame.sprite.Sprite):
@@ -24,13 +25,13 @@ class robot(pygame.sprite.Sprite):
         self.hp = hp
         self.shoot_time = 30
 
-    def shoot(self, sh, robot_group, block_group):
+    def shoot(self, sh, robot_group, block_group, color=red):
         if self.shoot_time > 0:
             self.shoot_time -= 1
         if (self.bullet_num > 0) and (self.shoot_time == 0) and (sh == 1):
-            new_bullet_x = self.pos[0] + self.h * np.math.sin(self.yaw/180)
-            new_bullet_y = self.pos[1] - self.h * np.math.cos(self.yaw/180)
-            self.bullet_group.add(bullet(self.player, new_bullet_x, new_bullet_y, self.yaw))
+            new_bullet_x = self.pos[0] - self.h/2 * np.math.sin(self.yaw * 3.1415926 / 180)
+            new_bullet_y = self.pos[1] - self.h/2 * np.math.cos(self.yaw * 3.1415926 / 180)
+            self.bullet_group.add(bullet(self.player, new_bullet_x, new_bullet_y, self.yaw,v=10,color=color))
             self.bullet_num -= 1
             self.shoot_time = 30
 
