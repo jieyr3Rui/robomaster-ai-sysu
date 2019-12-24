@@ -1,6 +1,6 @@
 # class block
 import pygame
-from define import *
+from elements.define import *
 
 class block(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h, color=blue):

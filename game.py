@@ -2,7 +2,7 @@
 import pygame
 from elements.robot import robot
 from elements.ground import ground
-from define import *
+from elements.define import *
 vec = pygame.math.Vector2
 class game():
     def __init__(self):

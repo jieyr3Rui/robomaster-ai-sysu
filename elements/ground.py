@@ -1,7 +1,7 @@
 # class block
 import pygame
 from elements.block import block
-from define import *
+from elements.define import *
 class ground(pygame.sprite.Sprite):
     def __init__(self, image_path):
         pygame.sprite.Sprite.__init__(self)

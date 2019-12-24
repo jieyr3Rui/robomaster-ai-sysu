@@ -1,7 +1,7 @@
 # class bullet
 import pygame
 import numpy as np
-from define import *
+from elements.define import *
 vec = pygame.math.Vector2
 
 class bullet(pygame.sprite.Sprite):

@@ -2,7 +2,7 @@
 import pygame
 import numpy as np
 from elements.bullet import bullet
-from define import *
+from elements.define import *
 
 vec = pygame.math.Vector2
 class robot(pygame.sprite.Sprite):
