@@ -5,13 +5,15 @@ from elements.define import *
 vec = pygame.math.Vector2
 
 class bullet(pygame.sprite.Sprite):
-    def __init__(self, player, x, y, yaw, v=10, color=red):
+    def __init__(self, image_path, player, x, y, yaw, v=10):
         pygame.sprite.Sprite.__init__(self)
         self.player = player
         self.yaw = yaw
         self.v = v
-        self.image = pygame.Surface((10, 10))
-        self.image.fill(color)
+        self.image_path = image_path
+        self.origin = pygame.image.load(self.image_path).convert()
+        self.image = pygame.transform.rotate(self.origin, yaw)
+        self.image.set_colorkey((0,0,0))
         self.rect = self.image.get_rect()
         self.pos = vec(x, y)
         self.rect.center = self.pos

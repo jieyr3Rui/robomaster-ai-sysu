@@ -13,8 +13,8 @@ class game():
         self.running = True
         self.done = False
         self.ground = ground('elements/resource/ground.png')
-        self.robot1 = robot('elements/resource/robot1.png', 'robot1', 200, 200, 0)
-        self.robot2 = robot('elements/resource/robot2.png', 'robot2', 500, 300, 0)
+        self.robot1 = robot('elements/resource/robot1.png', 'elements/resource/red_bullet.png', 'robot1', 200, 200, 0)
+        self.robot2 = robot('elements/resource/robot2.png', 'elements/resource/blue_bullet.png', 'robot2', 500, 300, 0)
 
         self.ground_group = pygame.sprite.Group()
         self.robot1_group = pygame.sprite.Group()

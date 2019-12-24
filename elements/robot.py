@@ -6,7 +6,7 @@ from elements.define import *
 
 vec = pygame.math.Vector2
 class robot(pygame.sprite.Sprite):
-    def __init__(self, image_path, player, x, y, yaw, bullet_num=100, hp=100):
+    def __init__(self, image_path, bullet_path, player, x, y, yaw, bullet_num=100, hp=100):
         pygame.sprite.Sprite.__init__(self)
         self.bullet_group = pygame.sprite.Group()
         self.player = player
@@ -21,6 +21,7 @@ class robot(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.pos = vec(x, y)
         self.rect.center = self.pos
+        self.bullet_path = bullet_path
         self.bullet_num = bullet_num
         self.hp = hp
         self.shoot_time = 30
@@ -33,7 +34,7 @@ class robot(pygame.sprite.Sprite):
         if (self.bullet_num > 0) and (self.shoot_time == 0) and (if_shoot == 1):
             new_bullet_x = self.pos[0] - self.h/2 * np.math.sin(self.yaw * 3.1415926 / 180)
             new_bullet_y = self.pos[1] - self.h/2 * np.math.cos(self.yaw * 3.1415926 / 180)
-            self.bullet_group.add(bullet(self.player, new_bullet_x, new_bullet_y, self.yaw,v=10,color=color))
+            self.bullet_group.add(bullet(self.bullet_path, self.player, new_bullet_x, new_bullet_y, self.yaw,v=10))
             self.bullet_num -= 1
             self.shoot_time = 30
 
