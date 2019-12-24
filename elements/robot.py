@@ -3,7 +3,7 @@ import pygame
 import numpy as np
 from elements.bullet import bullet
 from elements.define import *
-
+from elements.ray import ray
 vec = pygame.math.Vector2
 class robot(pygame.sprite.Sprite):
     def __init__(self, image_path, bullet_path, player, x, y, yaw, bullet_num=100, hp=100):
@@ -26,7 +26,7 @@ class robot(pygame.sprite.Sprite):
         self.hp = hp
         self.shoot_time = 30
         self.reward = 0
-        self.state = [0, 0, 0, 0, 0, 0, 0]
+        self.state = [0, 0, 0, 0, 0, 0, 0, 0]
 
     def shoot(self, if_shoot, robot_group, block_group, color=red):
         if self.shoot_time > 0:
@@ -39,7 +39,7 @@ class robot(pygame.sprite.Sprite):
             self.shoot_time = 30
 
         for b in self.bullet_group:
-            b.move(robot_group, block_group)
+            b.move()
         hit = pygame.sprite.groupcollide(self.bullet_group, block_group, True, False)
         # reward 
         self.reward -= 1
@@ -73,26 +73,37 @@ class robot(pygame.sprite.Sprite):
             # reward
             return True
 
-    def get_state(self, robot_group):
+    def get_state(self, robot_group, block_group):
         # x, y, yaw, hp, bullet_num, x_e, y_e,
-        x_e, y_e = 0, 0
-        for em in robot_group:
-            x_e, y_e = em.pos[0], em.pos[1]
-        self.state = [0, 0, 0, 0, 0, 0, 0]
+        found, diff, distance = 0, 0, 0
+        ray_x = self.pos[0] - self.h/2 * np.math.sin(self.yaw * 3.1415926 / 180)
+        ray_y = self.pos[1] - self.h/2 * np.math.cos(self.yaw * 3.1415926 / 180)
+        for robot in robot_group:
+            angle = get_yaw(ray_x, ray_y, robot.pos[0], robot.pos[1])
+            diff_ = get_angle_diff(angle, self.yaw)
+            if abs(diff_) <= 30: # 120
+                ray_to_robot = ray(ray_x, ray_y, angle)
+                if ray_to_robot.move(robot_group, block_group):
+                    found = 1
+                    diff = diff_
+                    distance = get_distance(self.pos[0], self.pos[1], robot.pos[0], robot.pos[1])
+                
+        self.state = [0, 0, 0, 0, 0, 0, 0, 0]
         self.state[0] = self.pos[0]
         self.state[1] = self.pos[1]
         self.state[2] = self.yaw
         self.state[3] = self.hp
         self.state[4] = self.bullet_num
-        self.state[5] = x_e
-        self.state[6] = y_e
+        self.state[5] = found
+        self.state[6] = diff
+        self.state[7] = distance
         return True
 
     def step(self, action, robot_group, block_group, bullet_color=red):
         self.reward = 0
         self.move(action[0], action[1], action[2], robot_group, block_group)
         self.shoot(action[3], robot_group, block_group, color=bullet_color)
-        self.get_state(robot_group)
+        self.get_state(robot_group, block_group)
         return True
 
     def be_hit(self):

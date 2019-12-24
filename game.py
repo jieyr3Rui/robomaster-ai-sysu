@@ -111,10 +111,10 @@ class game():
         self.time_tick_global += 1
         self.robot1.step(action1, self.robot2_group, self.ground.block_group, bullet_color=red)
         self.robot2.step(action2, self.robot1_group, self.ground.block_group, bullet_color=blue)
+        print(self.robot1.state)
         if self.done():
             self.reset()
-        return
-
+        return self.robot1.state, self.robot1.reward
 
     def reset(self):
         self.time_tick_local = 0
