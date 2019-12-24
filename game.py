@@ -11,7 +11,6 @@ class game():
         self.screen = pygame.display.set_mode((830, 530))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.done = False
         self.ground = ground('elements/resource/ground.png')
         self.robot1 = robot('elements/resource/robot1.png', 'elements/resource/red_bullet.png', 'robot1', 200, 200, 0)
         self.robot2 = robot('elements/resource/robot2.png', 'elements/resource/blue_bullet.png', 'robot2', 500, 300, 0)
@@ -22,6 +21,8 @@ class game():
         self.ground_group.add(self.ground)
         self.robot1_group.add(self.robot1)
         self.robot2_group.add(self.robot2)
+        self.time_tick_global = 0
+        self.time_tick_local  = 0
 
 
     def run(self):
@@ -78,33 +79,47 @@ class game():
             self.robot2.bullet_group.draw(self.screen)
             pygame.display.update()
 
-    def state(self):
-
-        return
-
-    def step(self, action1, action2):
-        self.robot1.step(action1, self.robot2_group, self.ground.block_group, bullet_color=red)
-        self.robot2.step(action2, self.robot1_group, self.ground.block_group, bullet_color=blue)
-        print(self.robot2.state)
-        return
-    
     def done(self):
-        if self.robot1.hp <= 0 and self.robot2.hp > 0:
-            self.robot1.loss()
-            self.robot2.win()
-            return True
-        elif self.robot1.hp > 0 and self.robot2.hp <= 0:
-            self.robot1.win()
-            self.robot2.loss()
-            return True
-        elif self.robot1.hp <= 0 and self.robot2.hp <= 0:
-            return True
-        else:
-            if self.robot1.bullet_num <= 0 and self.bullet_num <= 0:
+        if self.time_tick_local < 5400:
+            if self.robot1.hp <= 0 and self.robot2.hp > 0:
+                self.robot1.loss()
+                self.robot2.win()
                 return True
+            elif self.robot1.hp > 0 and self.robot2.hp <= 0:
+                self.robot1.win()
+                self.robot2.loss()
+                return True
+            elif self.robot1.hp <= 0 and self.robot2.hp <= 0:
+                self.robot1.draw()
+                self.robot2.draw()
+                return True
+        elif self.time_tick_local >= 5400:
+            if self.robot1.hp > self.robot2.hp:
+                self.robot1.win()
+                self.robot2.loss()
+            elif self.robot1.hp < self.robot2.hp:
+                self.robot1.win()
+                self.robot2.loss()
+            else:
+                self.robot1.draw()
+                self.robot2.draw()
+            return True
         return False
 
+    def step(self, action1, action2):
+        self.time_tick_local  += 1
+        self.time_tick_global += 1
+        self.robot1.step(action1, self.robot2_group, self.ground.block_group, bullet_color=red)
+        self.robot2.step(action2, self.robot1_group, self.ground.block_group, bullet_color=blue)
+        if self.done():
+            self.reset()
+        return
+
+
     def reset(self):
+        self.time_tick_local = 0
+        self.robot1.reset(200, 200)
+        self.robot2.reset(500, 300)
         return
 
 if __name__ == '__main__':

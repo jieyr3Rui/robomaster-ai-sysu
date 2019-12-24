@@ -105,16 +105,25 @@ class robot(pygame.sprite.Sprite):
     def win(self):
         # reward
         self.reward += 100
+        print( 'winner: ' + self.player)
         return True
     
     def loss(self):
         # reward
         self.reward -= 100
+        print('losser: ' + self.player)
+        return True
+
+    def draw(self):
+        # reward
+        self.reward -= 10
+        print('draw: ' + self.player)
         return True
 
     def reset(self, x, y):
         self.pos = vec(x, y)
         self.rect.center = self.pos
+        self.yaw = 0
         self.hp = 100
         self.bullet_num = 100
         self.bullet_group.empty()
