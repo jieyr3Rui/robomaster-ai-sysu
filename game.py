@@ -85,11 +85,24 @@ class game():
     def step(self, action1, action2):
         self.robot1.step(action1, self.robot2_group, self.ground.block_group, bullet_color=red)
         self.robot2.step(action2, self.robot1_group, self.ground.block_group, bullet_color=blue)
-        print(self.robot1.state)
+        print(self.robot2.state)
         return
     
     def done(self):
-        return
+        if self.robot1.hp <= 0 and self.robot2.hp > 0:
+            self.robot1.loss()
+            self.robot2.win()
+            return True
+        elif self.robot1.hp > 0 and self.robot2.hp <= 0:
+            self.robot1.win()
+            self.robot2.loss()
+            return True
+        elif self.robot1.hp <= 0 and self.robot2.hp <= 0:
+            return True
+        else:
+            if self.robot1.bullet_num <= 0 and self.bullet_num <= 0:
+                return True
+        return False
 
     def reset(self):
         return

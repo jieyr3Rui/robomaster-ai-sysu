@@ -65,6 +65,7 @@ class robot(pygame.sprite.Sprite):
            pygame.sprite.spritecollide(self, robot_group, False, False):
             self.rect.center = self.pos
             # reward
+            self.reward -= 0.1
             return False
         else:
             self.pos = new_pos
@@ -96,16 +97,19 @@ class robot(pygame.sprite.Sprite):
 
     def be_hit(self):
         self.hp -= 10
-        print(self.player + ' be hit ' + 'hp = ' + str(self.hp))
+        self.reward -= 10
+        # print(self.player + ' be hit ' + 'hp = ' + str(self.hp))
         # reward
         return True
     
     def win(self):
         # reward
+        self.reward += 100
         return True
     
     def loss(self):
         # reward
+        self.reward -= 100
         return True
 
     def reset(self, x, y):
@@ -116,5 +120,3 @@ class robot(pygame.sprite.Sprite):
         self.bullet_group.empty()
         return True
         
-    
-
