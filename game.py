@@ -19,7 +19,6 @@ class game():
         self.ground_group = pygame.sprite.Group()
         self.robot1_group = pygame.sprite.Group()
         self.robot2_group = pygame.sprite.Group()
-
         self.ground_group.add(self.ground)
         self.robot1_group.add(self.robot1)
         self.robot2_group.add(self.robot2)
@@ -79,15 +78,19 @@ class game():
             self.robot2.bullet_group.draw(self.screen)
             pygame.display.update()
 
-    def step(self, action1, action2):
-        self.robot1.move(action1[0], action1[1], action1[2], self.robot2_group, self.ground.block_group)
-        self.robot2.move(action2[0], action2[1], action2[2], self.robot1_group, self.ground.block_group)
-       
-        self.robot1.shoot(action1[3], self.robot2_group, self.ground.block_group, color=red)
-        self.robot2.shoot(action2[3], self.robot1_group, self.ground.block_group, color=blue)
+    def state(self):
 
         return
+
+    def step(self, action1, action2):
+        self.robot1.step(action1, self.robot2_group, self.ground.block_group, bullet_color=red)
+        self.robot2.step(action2, self.robot1_group, self.ground.block_group, bullet_color=blue)
+        print(self.robot1.state)
+        return
     
+    def done(self):
+        return
+
     def reset(self):
         return
 
@@ -96,4 +99,3 @@ if __name__ == '__main__':
     rm_ai.run()
 
     
-        
