@@ -42,7 +42,8 @@ class robot(pygame.sprite.Sprite):
             b.move()
         hit = pygame.sprite.groupcollide(self.bullet_group, block_group, True, False)
         # reward 
-        self.reward -= 1
+        if len(hit) >0:
+            self.reward -= 0.01
 
         for robot in robot_group:
             hit = pygame.sprite.spritecollide(robot, self.bullet_group, True, False)
@@ -65,7 +66,7 @@ class robot(pygame.sprite.Sprite):
            pygame.sprite.spritecollide(self, robot_group, False, False):
             self.rect.center = self.pos
             # reward
-            self.reward -= 0.1
+            self.reward -= 0.001
             return False
         else:
             self.pos = new_pos
