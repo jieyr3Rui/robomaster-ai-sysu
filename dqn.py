@@ -5,7 +5,7 @@ import numpy as np
 import gym
 import cv2
 from game import game
-
+import pygame
 # Hyper Parameters
 BATCH_SIZE = 32
 LR = 0.01                   # learning rate
@@ -100,6 +100,9 @@ for i_episode in range(400):
     s = rm_ai.reset()
     ep_r = 0
     while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
         a = dqn.choose_action(s)
         # take action
         s_, r, done, info = rm_ai.step(a)
