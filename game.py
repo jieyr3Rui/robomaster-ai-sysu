@@ -3,6 +3,7 @@ import pygame
 from elements.robot import robot
 from elements.ground import ground
 from elements.define import *
+import math
 vec = pygame.math.Vector2
 class game():
     def __init__(self):
@@ -23,16 +24,18 @@ class game():
         self.robot2_group.add(self.robot2)
         self.time_tick_global = 0
         self.time_tick_local  = 0
+        self.action_num = 54
+        self.state_num  = 8
 
 
     def run(self):
-        while self.running:
-            self.clock.tick(30)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    print(pygame.mouse.get_pos()) 
+        # while self.running:
+        #     self.clock.tick(30)
+        #     for event in pygame.event.get():
+        #         if event.type == pygame.QUIT:
+        #             self.running = False
+        #         elif event.type == pygame.MOUSEBUTTONUP:
+        #             print(pygame.mouse.get_pos()) 
 
             key = pygame.key.get_pressed()
             action1 = [0, 0, 0, 0]
@@ -71,13 +74,13 @@ class game():
             # print(action1, action2)
             self.step(action1, action2)
 
-            self.ground_group.draw(self.screen)
-            self.ground.block_group.draw(self.screen)
-            self.robot1_group.draw(self.screen)
-            self.robot2_group.draw(self.screen)
-            self.robot1.bullet_group.draw(self.screen)
-            self.robot2.bullet_group.draw(self.screen)
-            pygame.display.update()
+            # self.ground_group.draw(self.screen)
+            # self.ground.block_group.draw(self.screen)
+            # self.robot1_group.draw(self.screen)
+            # self.robot2_group.draw(self.screen)
+            # self.robot1.bullet_group.draw(self.screen)
+            # self.robot2.bullet_group.draw(self.screen)
+            # pygame.display.update()
 
     def done(self):
         if self.time_tick_local < 5400:
@@ -106,24 +109,65 @@ class game():
             return True
         return False
 
-    def step(self, action1, action2):
+    def step(self, ain):
+        action1 = [0, 0, 0, 0]
+        action2 = [0, 0, 0, 0]
+        a0 = math.floor(ain / 18)
+        if a0 == 0:
+            action1[0] = -3
+        elif a0 == 1:
+            action1[0] = 0
+        elif a0 == 2:
+            action1[0] = 3
+        ain = ain % 18
+
+        a0 = int(ain / 6)
+        if a0 == 0:
+            action1[1] = -3
+        elif a0 == 1:
+            action1[1] = 0
+        elif a0 == 2:
+            action1[1] = 3
+        ain = ain % 6
+
+        a0 = int(ain / 2)
+        if a0 == 0:
+            action1[2] = -3
+        elif a0 == 1:
+            action1[2] = 0
+        elif a0 == 2:
+            action1[2] = 3
+        ain = ain % 3
+
+        a0 = int(ain % 2)
+        if a0 == 0:
+            action1[3] = 0
+        elif a0 == 1:
+            action1[3] = 1
+
+        print(str(self.robot1.state) + ' ' + str(action1) + ' ' + str(self.robot1.reward))
+        
         self.time_tick_local  += 1
         self.time_tick_global += 1
         self.robot1.step(action1, self.robot2_group, self.ground.block_group, bullet_color=red)
         self.robot2.step(action2, self.robot1_group, self.ground.block_group, bullet_color=blue)
-        print(self.robot1.state)
+        
+        done = False
+        info = 0
+        self.ground_group.draw(self.screen)
+        self.ground.block_group.draw(self.screen)
+        self.robot1_group.draw(self.screen)
+        self.robot2_group.draw(self.screen)
+        self.robot1.bullet_group.draw(self.screen)
+        self.robot2.bullet_group.draw(self.screen)
+        pygame.display.update()
         if self.done():
+            done = True
             self.reset()
-        return self.robot1.state, self.robot1.reward
+        return self.robot1.state, self.robot1.reward, done, info
 
     def reset(self):
         self.time_tick_local = 0
         self.robot1.reset(200, 200)
         self.robot2.reset(500, 300)
-        return
-
-if __name__ == '__main__':
-    rm_ai = game()
-    rm_ai.run()
-
-    
+        return self.robot1.state

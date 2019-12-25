@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 import gym
 import cv2
-
+from game import game
 
 # Hyper Parameters
 BATCH_SIZE = 32
@@ -13,15 +13,20 @@ EPSILON = 0.9               # greedy policy
 GAMMA = 0.9                 # reward discount
 TARGET_REPLACE_ITER = 100   # target update frequency
 MEMORY_CAPACITY = 2000
-env = gym.make('CartPole-v0')
-env = env.unwrapped
-N_ACTIONS = env.action_space.n
-N_STATES = env.observation_space.shape[0]
-ENV_A_SHAPE = 0 if isinstance(env.action_space.sample(), int) else env.action_space.sample().shape     # to confirm the shape
+# env = gym.make('CartPole-v0')
+# env = env.unwrapped
+# N_ACTIONS = env.action_space.n
+# N_STATES = env.observation_space.shape[0]
+# ENV_A_SHAPE = 0 if isinstance(env.action_space.sample(), int) else env.action_space.sample().shape     # to confirm the shape
+
+rm_ai = game()
+N_ACTIONS = rm_ai.action_num
+N_STATES = rm_ai.state_num
+ENV_A_SHAPE = 0
 
 
 class Net(nn.Module):
-    def __init__(self, ):
+    def __init__(self):
         super(Net, self).__init__()
         self.fc1 = nn.Linear(N_STATES, 50)
         self.fc1.weight.data.normal_(0, 0.1)   # initialization
@@ -92,21 +97,18 @@ dqn = DQN()
 
 print('\nCollecting experience...')
 for i_episode in range(400):
-    s = env.reset()
-    print(s.shape)
+    s = rm_ai.reset()
     ep_r = 0
     while True:
-        env.render()
         a = dqn.choose_action(s)
-
         # take action
-        s_, r, done, info = env.step(a)
+        s_, r, done, info = rm_ai.step(a)
 
-        # modify the reward
-        x, x_dot, theta, theta_dot = s_
-        r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
-        r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
-        r = r1 + r2
+        # # modify the reward
+        # x, x_dot, theta, theta_dot = s_
+        # r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
+        # r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
+        # r = r1 + r2
 
         dqn.store_transition(s, a, r, s_)
 

@@ -87,6 +87,7 @@ class robot(pygame.sprite.Sprite):
                     found = 1
                     diff = diff_
                     distance = get_distance(self.pos[0], self.pos[1], robot.pos[0], robot.pos[1])
+                    self.reward += 10
                 
         self.state = [0, 0, 0, 0, 0, 0, 0, 0]
         self.state[0] = self.pos[0]
