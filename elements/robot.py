@@ -6,7 +6,7 @@ from elements.define import *
 from elements.ray import ray
 vec = pygame.math.Vector2
 class robot(pygame.sprite.Sprite):
-    def __init__(self, image_path, bullet_path, player, x, y, yaw, bullet_num=100, hp=100):
+    def __init__(self, image_path, bullet_path, player, x, y, yaw, bullet_num=500, hp=100):
         pygame.sprite.Sprite.__init__(self)
         self.bullet_group = pygame.sprite.Group()
         self.player = player
@@ -137,7 +137,7 @@ class robot(pygame.sprite.Sprite):
         self.rect.center = self.pos
         self.yaw = 0
         self.hp = 100
-        self.bullet_num = 100
+        self.bullet_num = 500
         self.bullet_group.empty()
         return True
         
