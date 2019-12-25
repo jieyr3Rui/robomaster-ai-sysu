@@ -99,7 +99,7 @@ class DQN(object):
 dqn = DQN()
 
 print('\nCollecting experience...')
-for i_episode in range(400):
+for i_episode in range(4000):
     s = rm_ai.reset()
     ep_r = 0
     while True:
