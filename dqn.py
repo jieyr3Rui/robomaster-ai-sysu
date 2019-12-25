@@ -37,6 +37,7 @@ class Net(nn.Module):
 
     def forward(self, x):
         x = self.fc1(x)
+        x = F.relu(x)
         x = self.fc2(x)
         x = F.relu(x)
         actions_value = self.out(x)
@@ -103,18 +104,9 @@ for i_episode in range(4000):
     s = rm_ai.reset()
     ep_r = 0
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
         a = dqn.choose_action(s)
         # take action
         s_, r, done, info = rm_ai.step(a)
-
-        # # modify the reward
-        # x, x_dot, theta, theta_dot = s_
-        # r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
-        # r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
-        # r = r1 + r2
 
         dqn.store_transition(s, a, r, s_)
 

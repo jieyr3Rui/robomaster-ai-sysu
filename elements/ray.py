@@ -1,7 +1,7 @@
 # class ray
 import pygame
 from elements.define import *
-
+import numpy as np
 vec = pygame.math.Vector2
 
 class ray(pygame.sprite.Sprite):
@@ -12,9 +12,10 @@ class ray(pygame.sprite.Sprite):
         self.image.set_colorkey((0,0,0))
         self.rect = self.image.get_rect()
         self.pos = vec(x, y)
+        self.pos_origin = self.pos
         self.rect.center = self.pos
         self.yaw = yaw
-        self.v = 10
+        self.v = 5
     
     def move(self, robot_group, block_group):
         time = 500
@@ -26,8 +27,8 @@ class ray(pygame.sprite.Sprite):
             self.rect.center = self.pos
             hit = pygame.sprite.spritecollide(self, block_group, False, False)
             if len(hit) > 0:
-                return False
+                return 'block', self.pos[0] - self.pos_origin[0], self.pos[1] - self.pos_origin[1]
             hit = pygame.sprite.spritecollide(self, robot_group, False, False)
             if len(hit) > 0:
-                return True
+                return 'robot', self.pos[0] - self.pos_origin[0], self.pos[1] - self.pos_origin[1]
         return False

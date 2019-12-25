@@ -29,58 +29,40 @@ class game():
 
 
     def run(self):
-        # while self.running:
-        #     self.clock.tick(30)
-        #     for event in pygame.event.get():
-        #         if event.type == pygame.QUIT:
-        #             self.running = False
-        #         elif event.type == pygame.MOUSEBUTTONUP:
-        #             print(pygame.mouse.get_pos()) 
-
-            key = pygame.key.get_pressed()
-            action1 = [0, 0, 0, 0]
-            if key[pygame.K_a]: # move left
-                action1[0] = -2 
-            if key[pygame.K_d]: # move right
-                action1[0] = 2
-            if key[pygame.K_w]: # move up
-                action1[1] = -2
-            if key[pygame.K_s]: # move down
-                action1[1] = 2
-            if key[pygame.K_t]: # rotate counter clockwise
-                action1[2] = 3
-            if key[pygame.K_y]: # rotate clockwise
-                action1[2] = -3
-            if key[pygame.K_r]: # shoot
-                action1[3] = 1
+        key = pygame.key.get_pressed()
+        action1 = [0, 0, 0, 0]
+        if key[pygame.K_a]: # move left
+            action1[0] = -2 
+        if key[pygame.K_d]: # move right
+            action1[0] = 2
+        if key[pygame.K_w]: # move up
+            action1[1] = -2
+        if key[pygame.K_s]: # move down
+            action1[1] = 2
+        if key[pygame.K_t]: # rotate counter clockwise
+            action1[2] = 3
+        if key[pygame.K_y]: # rotate clockwise
+            action1[2] = -3
+        if key[pygame.K_r]: # shoot
+            action1[3] = 1
 
 
-            action2 = [0, 0, 0, 0]
-            if key[pygame.K_LEFT]:  # move left
-                action2[0] = -2 
-            if key[pygame.K_RIGHT]: # move right
-                action2[0] = 2
-            if key[pygame.K_UP]:    # move up
-                action2[1] = -2
-            if key[pygame.K_DOWN]:  # move down
-                action2[1] = 2
-            if key[pygame.K_j]:     # rotate counter clockwise
-                action2[2] = 3
-            if key[pygame.K_k]:     # rotate clockwise
-                action2[2] = -3
-            if key[pygame.K_l]:     # shoot
-                action2[3] = 1
-
-            # print(action1, action2)
-            self.step(action1, action2)
-
-            # self.ground_group.draw(self.screen)
-            # self.ground.block_group.draw(self.screen)
-            # self.robot1_group.draw(self.screen)
-            # self.robot2_group.draw(self.screen)
-            # self.robot1.bullet_group.draw(self.screen)
-            # self.robot2.bullet_group.draw(self.screen)
-            # pygame.display.update()
+        action2 = [0, 0, 0, 0]
+        if key[pygame.K_LEFT]:  # move left
+            action2[0] = -2 
+        if key[pygame.K_RIGHT]: # move right
+            action2[0] = 2
+        if key[pygame.K_UP]:    # move up
+            action2[1] = -2
+        if key[pygame.K_DOWN]:  # move down
+            action2[1] = 2
+        if key[pygame.K_j]:     # rotate counter clockwise
+            action2[2] = 3
+        if key[pygame.K_k]:     # rotate clockwise
+            action2[2] = -3
+        if key[pygame.K_l]:     # shoot
+            action2[3] = 1
+        return action1, action2
 
     def done(self):
         if self.time_tick_local < 5400:
@@ -110,40 +92,12 @@ class game():
         return False
 
     def step(self, ain):
-        action1 = [0, 0, 0, 0]
-        action2 = [0, 0, 0, 0]
-        a0 = math.floor(ain / 18)
-        if a0 == 0:
-            action1[0] = -3
-        elif a0 == 1:
-            action1[0] = 0
-        elif a0 == 2:
-            action1[0] = 3
-        ain = ain % 18
-
-        a0 = int(ain / 6)
-        if a0 == 0:
-            action1[1] = -3
-        elif a0 == 1:
-            action1[1] = 0
-        elif a0 == 2:
-            action1[1] = 3
-        ain = ain % 6
-
-        a0 = int(ain / 2)
-        if a0 == 0:
-            action1[2] = -3
-        elif a0 == 1:
-            action1[2] = 0
-        elif a0 == 2:
-            action1[2] = 3
-        ain = ain % 3
-
-        a0 = int(ain % 2)
-        if a0 == 0:
-            action1[3] = 0
-        elif a0 == 1:
-            action1[3] = 1
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+        
+        action1 = get_action(ain)
+        action2 = get_action(0)
 
         print(str(self.robot1.state) + ' ' + str(action1) + ' ' + str(self.robot1.reward))
         

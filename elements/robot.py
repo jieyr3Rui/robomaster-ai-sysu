@@ -43,7 +43,7 @@ class robot(pygame.sprite.Sprite):
         hit = pygame.sprite.groupcollide(self.bullet_group, block_group, True, False)
         # reward 
         if len(hit) >0:
-            self.reward -= 0.01
+            self.reward -= 1
 
         for robot in robot_group:
             hit = pygame.sprite.spritecollide(robot, self.bullet_group, True, False)
@@ -84,12 +84,15 @@ class robot(pygame.sprite.Sprite):
             diff_ = get_angle_diff(angle, self.yaw)
             if abs(diff_) <= 30: # 120
                 ray_to_robot = ray(ray_x, ray_y, angle)
-                if ray_to_robot.move(robot_group, block_group):
+                hit_type, _, __ = ray_to_robot.move(robot_group, block_group)
+                if hit_type == 'robot':
                     found = 1
                     diff = diff_
                     distance = get_distance(self.pos[0], self.pos[1], robot.pos[0], robot.pos[1])
                     self.reward += 10
-                
+
+
+
         self.state = [0, 0, 0, 0, 0, 0, 0, 0]
         self.state[0] = self.pos[0]
         self.state[1] = self.pos[1]
