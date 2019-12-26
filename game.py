@@ -13,8 +13,8 @@ class game():
         self.clock = pygame.time.Clock()
         self.running = True
         self.ground = ground('elements/resource/ground.png')
-        self.robot1 = robot('elements/resource/robot1.png', 'elements/resource/red_bullet.png', 'robot1', 200, 200, 0)
-        self.robot2 = robot('elements/resource/robot2.png', 'elements/resource/blue_bullet.png', 'robot2', 500, 300, 0)
+        self.robot1 = robot('elements/resource/robot1.png', 'elements/resource/red_bullet.png', 'robot1', 200, 260, 270)
+        self.robot2 = robot('elements/resource/robot2.png', 'elements/resource/blue_bullet.png', 'robot2', 600, 260, 0)
 
         self.ground_group = pygame.sprite.Group()
         self.robot1_group = pygame.sprite.Group()
@@ -91,15 +91,17 @@ class game():
             return True
         return False
 
-    def step(self, ain):
+    def step(self, ain, typein='net'):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
-        
-        action1 = get_action(ain)
-        action2 = get_action(0)
+        if typein == 'net':
+            action1 = get_action(ain)
+            action2 = get_action(0)
+        elif typein == 'key':
+            action1, action2 = self.run()
 
-        print(str(self.robot1.state) + ' ' + str(action1) + ' ' + str(self.robot1.reward))
+        # print(str(self.robot1.state) + ' ' + str(action1) + ' ' + str(self.robot1.reward))
         
         self.time_tick_local  += 1
         self.time_tick_global += 1
@@ -125,3 +127,9 @@ class game():
         self.robot1.reset(200, 200)
         self.robot2.reset(500, 300)
         return self.robot1.state
+
+if __name__ == '__main__':
+    rm_ai_test = game()
+    while True:
+        rm_ai_test.step(0, typein='key')
+        rm_ai_test.clock.tick(30)

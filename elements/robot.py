@@ -42,15 +42,15 @@ class robot(pygame.sprite.Sprite):
             b.move()
         hit = pygame.sprite.groupcollide(self.bullet_group, block_group, True, False)
         # reward 
-        if len(hit) >0:
-            self.reward -= 1
+        if len(hit) > 0:
+            self.reward -= 0.1
 
         for robot in robot_group:
             hit = pygame.sprite.spritecollide(robot, self.bullet_group, True, False)
             hit_num = len(hit)
             while hit_num > 0:
                 # reward
-                self.reward += 20
+                self.reward += 2
                 robot.be_hit()
                 hit_num -= 1
 
@@ -66,12 +66,13 @@ class robot(pygame.sprite.Sprite):
            pygame.sprite.spritecollide(self, robot_group, False, False):
             self.rect.center = self.pos
             # reward
-            self.reward -= 0.001
+            self.reward -= 0.05
             return False
         else:
             self.pos = new_pos
             self.yaw = new_yaw
             # reward
+            self.reward += 0.01
             return True
 
     def get_state(self, robot_group, block_group):
@@ -88,20 +89,35 @@ class robot(pygame.sprite.Sprite):
                 if hit_type == 'robot':
                     found = 1
                     diff = diff_
+                    self.reward += 1
                     distance = get_distance(self.pos[0], self.pos[1], robot.pos[0], robot.pos[1])
-                    self.reward += 10
+                    
 
-
+        ray_yaw = 0
+        p_xd = []
+        p_yd = []
+        while ray_yaw < 360:
+            ray_acc = ray(self.pos[0], self.pos[1], ray_yaw)
+            hit_type, xd, yd = ray_acc.move(robot_group, block_group)
+            d = np.power(xd*xd+yd*yd, 0.5)
+            #print('yaw = ' + str(ray_yaw) + ' d = ' + str(d))
+            
+            p_xd.append(30.0/float(d+11-30) * np.math.sin(ray_yaw * 3.1415926 / 180))
+            p_yd.append(30.0/float(d+11-30) * np.math.cos(ray_yaw * 3.1415926 / 180))
+            ray_yaw += 10
+        # if self.player == 'robot1':
+        #     print(str(np.array(p_xd).mean()) + ' ' + str(np.array(p_yd).mean()))
 
         self.state = [0, 0, 0, 0, 0, 0, 0, 0]
-        self.state[0] = self.pos[0]
-        self.state[1] = self.pos[1]
-        self.state[2] = self.yaw
-        self.state[3] = self.hp
-        self.state[4] = self.bullet_num
+        self.state[0] = (self.pos[0]-10)/810
+        self.state[1] = (self.pos[1]-10)/510
+        self.state[2] = (np.array(p_xd).mean() + 8) / 14
+        self.state[3] = (np.array(p_yd).mean() + 8) / 14
+        self.state[4] = self.yaw / 360
         self.state[5] = found
-        self.state[6] = diff
-        self.state[7] = distance
+        self.state[6] = (diff + 30) / 60
+        self.state[7] = distance / 957
+        
         return True
 
     def step(self, action, robot_group, block_group, bullet_color=red):
@@ -113,26 +129,26 @@ class robot(pygame.sprite.Sprite):
 
     def be_hit(self):
         self.hp -= 10
-        self.reward -= 10
+        self.reward -= 1
         # print(self.player + ' be hit ' + 'hp = ' + str(self.hp))
         # reward
         return True
     
     def win(self):
         # reward
-        self.reward += 100
+        self.reward += 1
         print( 'winner: ' + self.player)
         return True
     
     def loss(self):
         # reward
-        self.reward -= 100
+        self.reward -= 1
         print('losser: ' + self.player)
         return True
 
     def draw(self):
         # reward
-        self.reward -= 10
+        self.reward -= 0.5
         print('draw: ' + self.player)
         return True
 

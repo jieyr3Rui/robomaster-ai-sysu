@@ -107,7 +107,7 @@ for i_episode in range(4000):
         a = dqn.choose_action(s)
         # take action
         s_, r, done, info = rm_ai.step(a)
-
+        print(str(s_) + ' ' + str(r))
         dqn.store_transition(s, a, r, s_)
 
         ep_r += r

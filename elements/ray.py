@@ -31,4 +31,4 @@ class ray(pygame.sprite.Sprite):
             hit = pygame.sprite.spritecollide(self, robot_group, False, False)
             if len(hit) > 0:
                 return 'robot', self.pos[0] - self.pos_origin[0], self.pos[1] - self.pos_origin[1]
-        return False
+        return 'block', 1000, 1000
