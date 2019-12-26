@@ -11,7 +11,7 @@ class bullet(pygame.sprite.Sprite):
         self.yaw = yaw
         self.v = v
         self.image_path = image_path
-        self.origin = pygame.image.load(self.image_path).convert()
+        self.origin = pygame.image.load(self.image_path)
         self.image = pygame.transform.rotate(self.origin, yaw)
         self.image.set_colorkey((0,0,0))
         self.rect = self.image.get_rect()

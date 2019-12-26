@@ -12,7 +12,7 @@ class robot(pygame.sprite.Sprite):
         self.player = player
         self.yaw = yaw
         self.image_path = image_path
-        self.origin = pygame.image.load(self.image_path).convert()
+        self.origin = pygame.image.load(self.image_path)
         rect_origin = self.origin.get_rect()
         self.w = rect_origin.w
         self.h = rect_origin.h
