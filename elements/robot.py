@@ -66,7 +66,7 @@ class robot(pygame.sprite.Sprite):
            pygame.sprite.spritecollide(self, robot_group, False, False):
             self.rect.center = self.pos
             # reward
-            self.reward -= 0.05
+            self.reward -= 0.5
             return False
         else:
             self.pos = new_pos

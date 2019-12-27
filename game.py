@@ -9,7 +9,7 @@ class game():
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("robomaster-ai")
-        # self.screen = pygame.display.set_mode((830, 530))
+        self.screen = pygame.display.set_mode((830, 530))
         self.clock = pygame.time.Clock()
         self.running = True
         self.ground = ground('elements/resource/ground.png')
@@ -110,13 +110,13 @@ class game():
         
         done = False
         info = 0
-        # self.ground_group.draw(self.screen)
-        # self.ground.block_group.draw(self.screen)
-        # self.robot1_group.draw(self.screen)
-        # self.robot2_group.draw(self.screen)
-        # self.robot1.bullet_group.draw(self.screen)
-        # self.robot2.bullet_group.draw(self.screen)
-        # pygame.display.update()
+        self.ground_group.draw(self.screen)
+        self.ground.block_group.draw(self.screen)
+        self.robot1_group.draw(self.screen)
+        self.robot2_group.draw(self.screen)
+        self.robot1.bullet_group.draw(self.screen)
+        self.robot2.bullet_group.draw(self.screen)
+        pygame.display.update()
         if self.done():
             done = True
             self.reset()
