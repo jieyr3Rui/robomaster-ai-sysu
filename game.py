@@ -93,9 +93,9 @@ class game():
         return False
 
     def step(self, ain, typein='net'):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
+        # for event in pygame.event.get():
+        #     if event.type == pygame.QUIT:
+        #         exit()
         if typein == 'net':
             action1 = get_action(ain)
             action2 = get_action(random.randint(0,53))
