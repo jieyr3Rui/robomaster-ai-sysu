@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
 from torch.distributions import Categorical
-import gym
-import cv2
 from game import game
 import pygame
 
