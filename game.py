@@ -3,18 +3,19 @@ import pygame
 from elements.robot import robot
 from elements.ground import ground
 from elements.define import *
+import random
 import math
 vec = pygame.math.Vector2
 class game():
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("robomaster-ai")
-        self.screen = pygame.display.set_mode((830, 530))
+        # pygame.display.set_caption("robomaster-ai")
+        # self.screen = pygame.display.set_mode((830, 530))
         self.clock = pygame.time.Clock()
         self.running = True
         self.ground = ground('elements/resource/ground.png')
-        self.robot1 = robot('elements/resource/robot1.png', 'elements/resource/red_bullet.png', 'robot1', 200, 260, 270)
-        self.robot2 = robot('elements/resource/robot2.png', 'elements/resource/blue_bullet.png', 'robot2', 600, 260, 0)
+        self.robot1 = robot('elements/resource/robot1.png', 'elements/resource/red_bullet.png', 'robot1', 200, 200, 270)
+        self.robot2 = robot('elements/resource/robot2.png', 'elements/resource/blue_bullet.png', 'robot2', 600, 200, 0)
 
         self.ground_group = pygame.sprite.Group()
         self.robot1_group = pygame.sprite.Group()
@@ -97,7 +98,8 @@ class game():
                 exit()
         if typein == 'net':
             action1 = get_action(ain)
-            action2 = get_action(0)
+            action2 = get_action(random.randint(0,53))
+            # _, action2 = self.run()
         elif typein == 'key':
             action1, action2 = self.run()
 
@@ -110,22 +112,23 @@ class game():
         
         done = False
         info = 0
-        self.ground_group.draw(self.screen)
-        self.ground.block_group.draw(self.screen)
-        self.robot1_group.draw(self.screen)
-        self.robot2_group.draw(self.screen)
-        self.robot1.bullet_group.draw(self.screen)
-        self.robot2.bullet_group.draw(self.screen)
-        pygame.display.update()
+        # self.ground_group.draw(self.screen)
+        # self.ground.block_group.draw(self.screen)
+        # self.robot1_group.draw(self.screen)
+        # self.robot2_group.draw(self.screen)
+        # self.robot1.bullet_group.draw(self.screen)
+        # self.robot2.bullet_group.draw(self.screen)
+        # pygame.display.update()
         if self.done():
             done = True
             self.reset()
+        # print(self.robot2.state[2], self.robot2.state[3])
         return self.robot1.state, self.robot1.reward, done, info
 
     def reset(self):
         self.time_tick_local = 0
         self.robot1.reset(200, 200)
-        self.robot2.reset(500, 300)
+        self.robot2.reset(600, 200)
         return self.robot1.state
 
 if __name__ == '__main__':

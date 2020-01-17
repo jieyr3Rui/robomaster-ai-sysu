@@ -137,7 +137,7 @@ def main():
     state_dim = rm_ai.state_num
     action_dim = rm_ai.action_num
     render = False
-    solved_reward = 23      # stop training if avg_reward > solved_reward
+    solved_reward = 10      # stop training if avg_reward > solved_reward
     log_interval = 5           # print avg reward in the interval
     max_episodes = 5000       # max training episodes
     max_timesteps = 60000         # max timesteps in one episode

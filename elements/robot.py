@@ -43,7 +43,7 @@ class robot(pygame.sprite.Sprite):
         hit = pygame.sprite.groupcollide(self.bullet_group, block_group, True, False)
         # reward 
         if len(hit) > 0:
-            self.reward -= 0.1
+            self.reward -= 0.01
 
         for robot in robot_group:
             hit = pygame.sprite.spritecollide(robot, self.bullet_group, True, False)
@@ -72,7 +72,7 @@ class robot(pygame.sprite.Sprite):
             self.pos = new_pos
             self.yaw = new_yaw
             # reward
-            self.reward += 0.01
+            self.reward += 0.001
             return True
 
     def get_state(self, robot_group, block_group):
@@ -89,7 +89,10 @@ class robot(pygame.sprite.Sprite):
                 if hit_type == 'robot':
                     found = 1
                     diff = diff_
-                    self.reward += 1
+                    if abs(diff) < 5:
+                        self.reward += 0.5
+                    else:
+                        self.reward += 0.1
                     distance = get_distance(self.pos[0], self.pos[1], robot.pos[0], robot.pos[1])
                     
 
@@ -111,8 +114,8 @@ class robot(pygame.sprite.Sprite):
         self.state = [0, 0, 0, 0, 0, 0, 0, 0]
         self.state[0] = (self.pos[0]-10)/810
         self.state[1] = (self.pos[1]-10)/510
-        self.state[2] = (np.array(p_xd).mean() + 8) / 14
-        self.state[3] = (np.array(p_yd).mean() + 8) / 14
+        self.state[2] = (np.array(p_xd).mean() + 8) / 16
+        self.state[3] = (np.array(p_yd).mean() + 8) / 16
         self.state[4] = self.yaw / 360
         self.state[5] = found
         self.state[6] = (diff + 30) / 60
@@ -136,13 +139,13 @@ class robot(pygame.sprite.Sprite):
     
     def win(self):
         # reward
-        self.reward += 1
+        self.reward += 10
         print( 'winner: ' + self.player)
         return True
     
     def loss(self):
         # reward
-        self.reward -= 1
+        self.reward -= 10
         print('losser: ' + self.player)
         return True
 
